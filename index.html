@@ -1,34 +1,97 @@
-<style>
-    body {background: #55CC38;}
-    
-    #ball {
-        position: relative;
-        top: 0px;
-        width: 100px;
-        height: 100px;
-        background: #515050;
-        border-radius: 50px;
-        
-        box-shadow: inset 5px 5px 15px #000000;        
-    }
-    
-    #center {
-        position: relative;
-        top: 30px;
-        background: linear-gradient(
-            160deg,
-            white 0%,
-            #DCDCDC 100%);
-        width: 40px;
-        height: 40px;
-        margin:30px;
-        border-radius:20px;
-        box-shadow: 0px 0px 2px #000000;                
-    }        
-</style>
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>Bicicletaria Virtual</title>
+    <link rel="shortcut icon" href="favicon.jpg">
+
+    <!--
+    <meta http-equiv="refresh" content="1">
+    <meta http-equiv="pragma" content="no-cache"/>
+    <link rel="stylesheet" href="file.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    -->
+
+    <style type="text/css">
+        body {
+            margin: 0; padding: 0;
+            font-family: sans-serif;
+            background: #FCFBED;
+        }
+
+        #homeheader {
+            margin: 0px; padding: 0px;
+            background: #DAD0B8;
+            vertical-align: top;
+            -moz-box-shadow: 0 0 10px gray;
+        }
+
+        #homeheader * {
+            margin: 0px;
+            text-align: center;
+        }
+
+        .floatpanel {
+            margin: 10px 0px 10px 10px;
+            display: inline-block;
+            padding: 15px;
+            background: #F0F0FF;
+            border-radius: 10px;
+            vertical-align: top;
+        }
+
+        .floatpaneltitle {
+            color: White;
+            margin: -15px -15px 0px -15px;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+            background: rgba(0,0,0,0.08);
+            text-shadow: rgba(0,0,0,0.5) 0px 1px 0px;
+        }
+    </style>
+</head>
 
 <body>
-<div id="ball">
-<div id="center" />
-</div>
+    <header id="homeheader">
+        <h1>Bicicletaria Virtual</h1>
+        <p>Sirva-se à vontade e... Divirta-se!</p>
+    </header>
+    <section id="chain" class="floatpanel">
+        <h1 class="floatpaneltitle">Calculadores</h1>
+        <p><a href="calculador_fixa_single.html">Fixa/Single</a></p>
+        <p><a href="GearComparison.html">Combinação de Marchas</a></p>
+        <p><a href="Spocalc.html">Comprimentos de Raio</a></p>
+    </section>
+    <section id="chain" class="floatpanel">
+        <h1 class="floatpaneltitle">Eventos de Audax</h1>
+        <p>(Em construção)</p>
+    </section>
+    <section id="chain" class="floatpanel">
+        <h1 class="floatpaneltitle">Pisca-Pisca da Polícia<br/>(Esquema Elétrico)</h1>
+        <p><a href="pisca_circuito.html">Circuito</a></p>
+        <p><a href="pisca_matriz_de_leds.html">Matriz de Leds</a></p>
+    </section>
+    <section id="chain" class="floatpanel">
+        <h1 class="floatpaneltitle">Comprimento da Gancheira</h1>
+        <p><a href="ChainstayLengthFormula.html">Fórmula do comprimento do chainstay</a></p>
+    </section>
+<!--
+    <section id="chain" class="floatpanel">
+        <h1 class="floatpaneltitle">Comprimento da Gancheira</h1>
+        <p><a href="ChainstayLengthFormula.html">Chainstay Length Formula</a></p>
+    </section>
+    <section id="chain" class="floatpanel">
+        <h1 class="floatpaneltitle">Comprimento da Gancheira</h1>
+        <p><a href="ChainstayLengthFormula.html">Chainstay Length Formula</a></p>
+    </section>
+    <section id="chain" class="floatpanel">
+        <h1 class="floatpaneltitle">Comprimento da Gancheira</h1>
+        <p><a href="ChainstayLengthFormula.html">Chainstay Length Formula</a></p>
+    </section>
+-->
+
+    <div id="finalnote" style="position:absolute; bottom: 0px; right: 0px; background: rgba(0,0,0,0.5); padding: 5px;">
+        <span style="font-size: 70%;">por</span> <a href="http://www.facebook.com/heltonbiker">heltonbiker</a>
+    </div>
 </body>
+</html>
