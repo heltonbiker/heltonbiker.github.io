@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Spoke Calculator</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <style type="text/css">
+        body {
+            margin-left: 150px;
+        }
+        
+        #tablediv tr td {
+            border: 1px solid black;
+            border-collapse: collapse; 
+        }        
+    </style>
+</head>
+
+<body onload="calcula();">
+    <form id="entradas">
+        <table>
+            <tr>
+                <td><label for="flange_offset">Flange Offset</label></td>
+                <td><input id="flange_offset" value="26" onchange="calcula();"></input></td>
+            </tr>
+            <tr>
+                <td><label for="flange_radius">Flange Radius</label></td>
+                <td><input id="flange_radius" value="34" onchange="calcula();"></input></td>
+            </tr>
+            <tr>
+                <td><label for="rim_radius">Rim Radius</label></td>
+                <td><input id="rim_radius" value="288" onchange="calcula();"></input></td>
+            </tr>
+            <tr>
+                <td><label for="rim_holes">Rim Holes</label></td>
+                <td><input id="rim_holes" value="36" onchange="calcula();"></input></td>
+            </tr>
+        </table>
+    </form>
+    
+    <br/>
+
+    <div id="tablediv"></div>
+    
+    <script type="text/javascript">
+        function calcula() {
+
+            var root=document.getElementById('tablediv');
+            var tab=document.createElement('table');
+            var tbo=document.createElement('tbody');
+            var row, cell;
+            
+            row = document.createElement('tr');
+            
+            cell = document.createElement('th');
+            cell.appendChild(document.createTextNode('Crossings'));
+            row.appendChild(cell);
+            
+            cell = document.createElement('th');
+            cell.appendChild(document.createTextNode('Spoke Length'));
+            row.appendChild(cell);
+            
+            tbo.appendChild(row);
+            
+            var FLANGE_OFFSET = Number(document.getElementById('flange_offset').value);
+            var FLANGE_RADIUS = Number(document.getElementById('flange_radius').value);
+            var RIM_RADIUS =    Number(document.getElementById('rim_radius').value);
+            var RIM_HOLES =     Number(document.getElementById('rim_holes').value);
+            
+            var temp1, temp2, SPOKE_LENGTH;
+            
+            for(var i=0;i<5;i++){
+                row=document.createElement('tr');
+                
+                var cross = i;
+                temp1 = (cross * 4 * Math.PI);
+                temp2 = Math.cos(temp1/RIM_HOLES);
+                SPOKE_LENGTH = Math.sqrt(Math.pow(FLANGE_RADIUS,2) + Math.pow(RIM_RADIUS,2) + Math.pow(FLANGE_OFFSET,2) - 2 * RIM_RADIUS * FLANGE_RADIUS * temp2);
+                
+                var line = [parseInt(cross), SPOKE_LENGTH.toFixed(2)];
+                
+                for(var j=0;j<2;j++){
+                    cell=document.createElement('td');
+                    cell.appendChild(document.createTextNode(line[j]))
+                    row.appendChild(cell);
+                }
+                tbo.appendChild(row);
+            }
+            tab.appendChild(tbo);
+            root.appendChild(tab);
+        }
+    </script>
+    
+</body>
+</html>

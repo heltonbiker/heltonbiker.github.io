@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Calculador de Relação Fixa/Single</title>
+    <script language="javascript" type="text/javascript">  
+        function calcula(){  
+            pinha = Number(document.form1.cog.value);  
+            coroa = Number(document.form1.chain.value);  
+            tamanhopneu = Number(document.form1.tamanhopneu.value);
+            pedivela = Number(document.form1.pedivela.value);
+            
+            ratio = coroa/pinha;  
+            document.form1.ratio.value=ratio.toFixed(2);  
+            
+            inches = tamanhopneu*2*0.001*39.37*coroa/pinha;
+            document.form1.inches.value=inches.toFixed(1);
+            
+            desenvolvimentoM = tamanhopneu*2*0.001*coroa/pinha*Math.PI;
+            document.form1.desenvolvimentoM.value = desenvolvimentoM.toFixed(3);
+            
+            gain = tamanhopneu/pedivela*(coroa/pinha);
+            document.form1.gain.value=gain.toFixed(2);
+                
+            coroaTemp=coroa2=coroa;
+            pinhaTemp=pinha2=pinha;
+                
+            while (coroaTemp>0) {
+                if (pinhaTemp>coroaTemp) {
+                    sltemp = coroaTemp;
+                    coroaTemp = pinhaTemp;
+                    pinhaTemp = sltemp;
+                }
+                coroaTemp = coroaTemp-pinhaTemp;
+            }
+            
+            rear = pinha2/pinhaTemp;
+            front = coroa2/pinhaTemp;
+            
+            if((rear%2!=0) && (front%2!=0)) {
+                skid = rear;
+                skidAmbi = rear*2;
+            }
+            else{
+                skid = skidAmbi = rear;
+            }
+            
+            document.form1.skid.value=skid;
+            document.form1.skidA.value=skidAmbi;
+                
+            rpm = Number(document.form2.menurpm.value);  
+            document.form2.campok.value = (desenvolvimentoM*60*rpm/1000).toFixed(1);
+                 
+            km=Number(document.form3.menukm.value);  
+            document.form3.campokrpm.value = (km*1000/desenvolvimentoM/60).toFixed(1);
+        }  
+    </script>
+  </head>
+  <body id="ipboard_body" onload="calcula();" style="width: 300px">
+    <h2 class="touch-row">Relação</h2>
+    <form id="form1" name="form1" method="post" action="">
+      <table width="400" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr id="row_coroa">
+            <td width="130">Coroa</td>
+            <td align="right" width="100">
+              <select name="chain" id="chain"
+              onchange="calcula();" style="width: 100px">
+                <option value="32">32</option>
+                <option value="33">33</option>
+                <option value="34">34</option>
+                <option value="35">35</option>
+                <option value="36">36</option>
+                <option value="37">37</option>
+                <option value="38">38</option>
+                <option value="39">39</option>
+                <option value="40">40</option>
+                <option value="41">41</option>
+                <option value="42">42</option>
+                <option value="43">43</option>
+                <option value="44" selected="selected">44</option>
+                <option value="45">45</option>
+                <option value="46">46</option>
+                <option value="47">47</option>
+                <option value="48">48</option>
+                <option value="49">49</option>
+                <option value="50">50</option>
+                <option value="51">51</option>
+                <option value="52">52</option>
+                <option value="53">53</option>
+                <option value="54">54</option>
+              </select>
+            </td>
+          </tr>
+          <tr id="row_pinha">
+            <td width="130">Pinha</td>
+            <td align="right" width="100">
+              <select name="cog" id="cog"
+              onchange="calcula();" style="width: 100px">
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16" selected="selected">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+              </select>
+            </td>
+          </tr>
+          </tr> <!-- Valores de Saída --> <tr>
+            <td width="130">&nbsp;</td>
+            <td align="right" width="110">&nbsp;</td>
+          </tr>          
+          <tr id="row_pedivela">
+            <td width="130">Braço do pedivela</td>
+            <td align="right" width="110">
+              <select name="pedivela" id="pedivela"
+                onchange="calcula();" style="width: 100px">
+                <option value="160">160</option>
+                <option value="165">165</option>
+                <option value="167.5">167.5</option>
+                <option value="170" selected="selected">170</option>
+                <option value="172.5">172.5</option>
+                <option value="175">175</option>
+              </select>
+            </td>
+          </tr>
+          <tr id="row_pneu">
+            <td width="130">Pneu</td>
+            <td align="right" width="110">
+              <select name="tamanhopneu" id="tamanhopneu"
+                onchange="calcula();" style="width: 100px">
+                <option value="305">26 X 1.0 (559 mm)</option>
+                <option value="311">26 x 1 (650C)</option>
+                <option value="312">26 X 1.5</option>
+                <option value="324">26 X 1.9</option>
+                <option value="330">26 X 1 3/8 (590 mm)</option>
+                <option value="340">27 X 1</option>
+                <option value="342">27 X 1 1/8</option>
+                <option value="343">27 X 1 1/4</option>
+                <option value="345">27 X 1 3/8</option>
+                <option value="330">26 X 2.125</option>
+                <option value="332">700 x 21</option>
+                <option value="334" selected="selected">700 x 23</option>
+                <option value="335">700 x 25</option>
+                <option value="336">700 x 28</option>
+                <option value="342">700 x 32</option>
+                <option value="345">700 x 35</option>
+                <option value="347">700 x 38</option>
+                <option value="354">700 x 44</option>
+                <option value="365">700 x 50</option>
+                <option value="370">700 x 56</option>
+              </select>
+            </td>
+          </tr> <!-- Valores de Saída --> <tr>
+            <td width="130">&nbsp;</td>
+            <td align="right" width="110">&nbsp;</td>
+          </tr>
+          <tr>
+            <td width="130">Relação</td>
+            <td align="right" width="110"><input name="ratio" size="11"
+                readonly="true"></td>
+          </tr>
+          <tr>
+            <td width="130">Ganho</td>
+            <td align="right" width="110"><input name="gain" size="11"
+                readonly="true"></td>
+          </tr>
+          <tr>
+            <td width="130">"Gear Inches"</td>
+            <td align="right" width="110"><input name="inches" size="11"
+                readonly="true"></td>
+          </tr>
+          <tr>
+            <td width="130">Desenvolvimento (metros)</td>
+            <td align="right" width="110"><input name="desenvolvimentoM"
+                size="11" readonly="true"></td>
+          </tr>
+          <tr>
+            <td width="130">Pontos de Skid</td>
+            <td align="right" width="110"><input name="skid" size="11"
+                readonly="true"></td>
+          </tr>
+          <tr>
+            <td width="130">Pontos de Skid (ambidestro)</td>
+            <td align="right" width="110"><input name="skidA" size="11"
+                readonly="true"></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+    <br>
+    <h2 class="touch-row">Cadência (rpm)</h2>
+    <form id="form2" name="form2" method="post" action="">
+      <table width="400" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td align="left" width="80">rpm</td>
+            <td align="center" width="80">km/h</td>
+          </tr>
+          <tr>
+            <td align="left" width="80">
+              <select name="menurpm" id="menurpm" onchange="calcula();"
+                width="60" style="width: 60px">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+                <option value="45">45</option>
+                <option value="50">50</option>
+                <option value="55">55</option>
+                <option value="60">60</option>
+                <option value="65">65</option>
+                <option value="70">70</option>
+                <option value="75">75</option>
+                <option value="80">80</option>
+                <option value="85">85</option>
+                <option value="90" selected="selected">90</option>
+                <option value="95">95</option>
+                <option value="100">100</option>
+                <option value="105">105</option>
+                <option value="110">110</option>
+                <option value="115">115</option>
+                <option value="120">120</option>
+                <option value="125">125</option>
+                <option value="130">130</option>
+                <option value="135">135</option>
+                <option value="140">140</option>
+                <option value="145">145</option>
+                <option value="150">150</option>
+                <option value="160">160</option>
+                <option value="165">165</option>
+                <option value="170">170</option>
+                <option value="175">175</option>
+                <option value="180">180</option>
+                <option value="185">185</option>
+                <option value="190">190</option>
+                <option value="195">195</option>
+                <option value="200">200</option>
+              </select>
+            </td>
+            <td align="center" width="80"><input name="campok"
+                id="campok" value="10" size="7" readonly="true"></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+    <br>
+    <h2 class="touch-row">Velocidade (km/h)</h2>
+    <form id="form3" name="form3" method="post" action="">
+      <table width="400" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td align="left" width="80">km/h</td>
+            <td align="center" width="80">rpm</td>
+          </tr>
+          <tr>
+            <td align="left" width="80">
+              <select name="menukm" id="menukm" onchange="calcula();"
+                width="60" style="width: 60px">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+                <option value="45" selected="selected">45</option>
+                <option value="50">50</option>
+                <option value="55">55</option>
+                <option value="60">60</option>
+                <option value="65">65</option>
+                <option value="70">70</option>
+                <option value="75">75</option>
+                <option value="80">80</option>
+              </select>
+            </td>
+            <td align="center" width="80"><input name="campokrpm"
+                id="campok" value="10" size="7" readonly="true"></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </body>
+</html>

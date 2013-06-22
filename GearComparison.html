@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="pragma" content="no-cache"/>
+    <title>Comparador de Marchas</title>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.js"></script>
+
+    <style type="text/css">
+        @media print { .noprint {display:none;} }
+
+        html, body { font-family: sans-serif; }
+
+        body { width: 600px; margin-left: 200px; }
+
+        label, input { width: 100%; }
+        
+        input {
+            border-style: none;
+            background-color: #E5D1AC;
+            color: black;
+            font-weight: bold;
+            padding-left: 2px;
+        }
+    </style>
+</head>
+
+
+<body onload="Draw();">
+    <p>Para modificar os valores abaixo, digite os números de dentes (separados por espaços) nas linhas correspondentes, e em seguida tecle "Tab".</p>
+    <form>
+        <table>
+            <tr id="set_titles" cols="2">
+                <td width="300">
+                    <h3>Grupo 1</h3>
+                </td>
+                <td width="300">
+                    <h3>Grupo 2</h3>
+                </td>
+            </tr>
+            <tr id="cranksizes">
+                <td width="300">
+                    <label for="cranksizes1">Pedivela</label><br/>
+                    <input id="cranksizes1" onblur="Draw()" type="text" value="53 39"/><br/>
+                </td>
+                <td width="300">
+                    <label for="cranksizes2">Pedivela</label><br/>
+                    <input id="cranksizes2" onblur="Draw()" type="text" value="50 34"/><br/>
+                </td>
+            </tr>
+            <tr id="cogsizes">
+                <td width="300">
+                    <label for="cogsizes1">Cassete</label><br/>
+                    <input id="cogsizes1" onblur="Draw()" type="text" value="28 24 20 18 16 14 12 11"/><br/>
+                </td>
+                <td width="300">
+                    <label for="cogsizes2">Cassete</label><br/>
+                    <input id="cogsizes2" onblur="Draw()" type="text" value="25 23 21 19 17 15 13 12"/><br/>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <svg id="svg" width="600" height="450"></svg>
+</body>
+
+
+<script>
+
+    var ns = "http://www.w3.org/2000/svg";
+
+    function Draw () {
+
+        var svg = document.getElementById("svg");
+        svg.setAttribute('style', 'background: #EBEBEB');
+        var w = svg.getAttribute('width');
+        var h = svg.getAttribute('height');
+
+        while (svg.hasChildNodes()) {
+            svg.removeChild(svg.lastChild);
+        }
+
+        var maxratio = 5;
+        var minratio = 1;
+        var colors = ['#00A016', '#0088C6', '#DB0A00'].reverse();
+
+
+        var elementnames = [['1', -1], ['2', 1]];
+        for (i in elementnames) {
+            var numid = elementnames[i][0];
+            var direction = elementnames[i][1];
+            var cranksizename = 'cranksizes' + numid;
+            var cogsizename = 'cogsizes' + numid;
+
+            var cranksizes = document.getElementById(cranksizename).value.match(/(\d+)/g).sort().reverse();
+            var cogsizes = document.getElementById(cogsizename).value.match(/(\d+)/g).sort().reverse();
+
+            for (crankindex in cranksizes) {
+                var cranksize = cranksizes[crankindex];
+
+                for (cogindex in cogsizes) {
+                    var cogsize = cogsizes[cogindex];
+                    var ratio = cranksize/cogsize;
+                    var pos = h * (1 - ((ratio - minratio)/maxratio));
+                    var posx = w*0.5 + ((parseInt(crankindex)+1) * ((w*0.5) / (cranksizes.length+1)))*direction;
+                    var ratiotext = "(" + (ratio+1e-10).toString().slice(0,4) + ")";
+
+                    console.log(pos);
+
+                    addRatioLine(pos, w*(1+direction), w*0.5);
+
+                    addRatioPoint(pos, posx);
+
+                    addRatioText (ratiotext, pos, posx);
+
+                    addToothText (cogsize, pos, posx);
+                }
+            }
+        }
+
+
+
+        function addRatioLine(py, left, right) {
+            var line = document.createElementNS (ns, "line");
+            line.setAttribute('stroke', colors[crankindex]);
+            line.setAttribute('stroke-width', 0.5);
+            line.setAttribute('opacity', 0.2);
+            line.setAttribute('x1', left);
+            line.setAttribute('x2', right);
+            line.setAttribute('y1', py);
+            line.setAttribute('y2', py);
+            svg.appendChild(line);
+        }
+
+        function addRatioPoint(py, px) {
+            var circle = document.createElementNS (ns, "circle");
+            circle.setAttribute('fill', colors[crankindex]);
+            circle.setAttribute('cx', px);
+            circle.setAttribute('cy', py);
+            circle.setAttribute('r', 3.5);
+            svg.appendChild(circle);
+        }
+
+        function addRatioText(text, py, px) {
+            var timeText = document.createElementNS (ns,"text");
+            timeText.setAttribute("x", px+6);
+            timeText.setAttribute("y", py+3);
+            timeText.setAttribute("text-anchor", 'start');
+            timeText.setAttribute("font-size","10px");
+            timeText.setAttribute("fill","gray");
+            //var timetextcontent = document.createTextNode((ratio+1e-10).toString().slice(0,4));
+            var timetextcontent = document.createTextNode(text);
+            timeText.appendChild(timetextcontent);
+            svg.appendChild(timeText);
+        }
+
+        function addToothText(text, py, px) {
+            var timeText = document.createElementNS (ns,"text");
+            timeText.setAttribute("x", px-6);
+            timeText.setAttribute("y", py+3);
+            timeText.setAttribute("text-anchor", 'end');
+            timeText.setAttribute("font-size","10px");
+            timeText.setAttribute("fill","black");
+            var timetextcontent = document.createTextNode(text);
+            timeText.appendChild(timetextcontent);
+            svg.appendChild(timeText);
+        }
+    }
+
+</script>
+</html>
