@@ -8,7 +8,7 @@
             pinha = Number(document.form1.cog.value);  
             coroa = Number(document.form1.chain.value);  
             tamanhopneu = Number(document.form1.tamanhopneu.value);
-            pedivela = Number(document.form1.pedivela.value);
+            //pedivela = Number(document.form1.pedivela.value);
             
             ratio = coroa/pinha;  
             document.form1.ratio.value=ratio.toFixed(2);  
@@ -19,8 +19,8 @@
             desenvolvimentoM = tamanhopneu*2*0.001*coroa/pinha*Math.PI;
             document.form1.desenvolvimentoM.value = desenvolvimentoM.toFixed(3);
             
-            gain = tamanhopneu/pedivela*(coroa/pinha);
-            document.form1.gain.value=gain.toFixed(2);
+            //gain = tamanhopneu/pedivela*(coroa/pinha);
+            //document.form1.gain.value=gain.toFixed(2);
                 
             coroaTemp=coroa2=coroa;
             pinhaTemp=pinha2=pinha;
@@ -113,7 +113,8 @@
           </tr> <!-- Valores de Saída --> <tr>
             <td width="130">&nbsp;</td>
             <td align="right" width="110">&nbsp;</td>
-          </tr>          
+          </tr>
+          <!--
           <tr id="row_pedivela">
             <td width="130">Braço do pedivela</td>
             <td align="right" width="110">
@@ -128,6 +129,7 @@
               </select>
             </td>
           </tr>
+          -->
           <tr id="row_pneu">
             <td width="130">Pneu</td>
             <td align="right" width="110">
@@ -164,11 +166,13 @@
             <td align="right" width="110"><input name="ratio" size="11"
                 readonly="true"></td>
           </tr>
+          <!--
           <tr>
             <td width="130">Ganho</td>
             <td align="right" width="110"><input name="gain" size="11"
                 readonly="true"></td>
           </tr>
+          -->
           <tr>
             <td width="130">"Gear Inches"</td>
             <td align="right" width="110"><input name="inches" size="11"
