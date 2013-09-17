@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>View Fringes</title>
+
+    <style>
+        canvas {
+            background: beige
+        }
+    </style>
+
+</head>
+
+<body onload="redraw();">
+<canvas id="Canvas" width="700" height="700"></canvas>
+
+<script src="data/fringes.js"></script>
+
+<script type="text/javascript">
+
+    var elem = document.getElementById('Canvas');
+    var w = elem.width
+    var h = elem.height
+    var angx = 0
+    var angy = 0
+
+    var franjas = fringes();
+
+    function redraw () {
+        elem = document.getElementById('Canvas');
+        var context = elem.getContext('2d');
+        context.clearRect(0,0,w, h)
+
+
+        context.fillStyle = '#00f';
+        context.strokeStyle = '#00f';
+
+        context.save();
+
+        scale = 9;
+        context.translate(w*0.5, h*0.7);
+        context.scale(scale, -scale);
+
+        context.lineWidth = 2/scale;
+
+        my = rotay()
+        mx = rotax()
+
+
+        for (var f in franjas) {
+
+            var pontosfranja = []
+
+            for (var p = 0; p < franjas[f].length; p = p+4) {
+
+                var x = franjas[f][p][0]
+                var y = franjas[f][p][1]
+                var z = franjas[f][p][2]
+
+                var pt = produto(my, produto(mx, [x,y,z]));
+
+                pontosfranja.push([pt[0], pt[1]]);
+            }
+
+            context.beginPath();
+            context.moveTo(pontosfranja[0][0], pontosfranja[0][1]);
+            for (var ponto = 1; ponto < pontosfranja.length; ponto++) {
+                context.lineTo(pontosfranja[ponto][0], pontosfranja[ponto][1])
+            }
+            context.stroke();
+        }
+
+        context.restore();
+    }
+
+    function rotax() {
+        var sn = Math.sin(angx);
+        var cs = Math.cos(angx);
+        return [ 1,  0,   0,
+                 0, cs, -sn,
+                 0, sn,  cs ]
+    }
+
+    function rotay() {
+        var sn = Math.sin(angy);
+        var cs = Math.cos(angy);
+        return [ cs, 0, sn,
+                  0, 1,  0,
+                -sn, 0, cs ]
+    }
+
+
+    function produto(matriz, ponto) {
+        x = matriz[0] * ponto[0] + matriz[1] * ponto[1] + matriz[2] * ponto[2]
+        y = matriz[3] * ponto[0] + matriz[4] * ponto[1] + matriz[5] * ponto[2]
+        z = matriz[6] * ponto[0] + matriz[7] * ponto[1] + matriz[8] * ponto[2]
+
+        return [x, y, z]
+    }
+
+
+    document.getElementById('Canvas').onmousemove = mousemove;
+    document.getElementById('Canvas').onmouseout = mouseleave;
+
+    function mousemove(e) {
+        x = e.clientX - 10;
+        y = h - e.clientY + 10;
+        angy = (w - x/w) * Math.PI - Math.PI*0.5;
+        angx = -(Math.PI*y/h - Math.PI*0.5);
+        redraw();
+    }
+
+    function mouseleave(e) {
+        angy = 0;
+        angx = 0;
+        redraw();
+    }
+
+</script>
+
+</body>
+</html>
