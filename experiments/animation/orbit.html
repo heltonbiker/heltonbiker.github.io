@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br">
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta http-equiv="pragma" content="no-cache" />
+
+	<title>RequestAnimationFrame.js example</title>
+
+</head>
+
+<body>
+    <script>
+        if ( !window.requestAnimationFrame ) {
+
+            window.requestAnimationFrame = ( function() {
+
+                return window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimationFrame ||
+                function(callback, element) {
+                    window.setTimeout( callback, 1000 / 60 );
+                };
+            } )();
+        }
+    </script>
+    
+    <script>
+
+        var canvas, context;
+        var size = 600;
+
+        init();
+        animate();
+
+        function init() {
+
+            canvas = document.createElement('canvas');
+            canvas.height = size
+            canvas.width = size
+
+            context = canvas.getContext( '2d' );
+
+            document.body.appendChild( canvas );
+
+        }
+
+        function animate() {
+            requestAnimationFrame( animate );
+            draw();
+        }
+
+        function draw() {
+
+            var time = new Date().getTime() * 0.005;
+            var x = Math.sin( time ) * 200 + 300;
+            var y = Math.cos( time * 0.9 ) * 200 + 300;
+
+            context.fillStyle = '#ccc';
+            context.fillRect( 0, 0, canvas.width, canvas.height );
+
+            context.fillStyle = 'rgb(0,0,0)';
+            context.beginPath();
+            context.arc( x, y, 5, 0, Math.PI * 2, true );
+            context.closePath();
+            context.fill();
+
+        }
+
+    </script>
+
+    
+</body>
+</html>
