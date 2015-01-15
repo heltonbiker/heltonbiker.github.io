@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Overlaying an image map type</title>
+    <title>Strava Heatmap over Google Satellite</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <style>
@@ -18,7 +18,7 @@
             var mapOptions = {
                 zoom: 10,
                 center: new google.maps.LatLng(-30, -51),
-                mapTypeId: google.maps.MapTypeId.SATELLITE
+                mapTypeId: google.maps.MapTypeId.HYBRID
             };
             map = new google.maps.Map(document.getElementById('map-canvas'),
                 mapOptions);
