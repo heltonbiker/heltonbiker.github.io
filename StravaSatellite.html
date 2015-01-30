@@ -34,6 +34,9 @@
         });
 
             map.overlayMapTypes.push(imageMapType);
+            
+            var panoramioLayer = new google.maps.panoramio.PanoramioLayer();
+            panoramioLayer.setMap(map);            
 
         }
 
