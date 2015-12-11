@@ -41,31 +41,35 @@
             text-shadow: -0.5px -0.5px black, 0.5px 0.5px #ccc;
             color: #666;
         }
+
+        .pouso {
+            color: #CA1658;
+        }
     </style>
 </head>
 
 <body>
-    <table>
+    <table id="distanceTable">
         <tr><th>local</th><th>distância</th></tr>
 
         <tr><td>Chuí/Chuy</td><td>0</td></tr>
         <tr><td>La Coronilla</td><td>24</td></tr>
-        <tr><td>Santa Tereza</td><td>33</td></tr>
+        <tr class="pouso"><td>Santa Tereza</td><td>33</td></tr>
         <tr><td>Punta del Diablo</td><td>40</td></tr>
         <tr><td>La Esmeralda</td><td>58</td></tr>
         <tr><td>El Cocal (camping)</td><td>66</td></tr>
         <tr><td>Castillos</td><td>74</td></tr>
         <tr><td>Aguas Dulces</td><td>84</td></tr>
-        <tr><td>Valizas</td><td>90</td></tr>
-        <tr><td>Cabo Polonio (port.)</td><td>97</td></tr>
+        <tr class="pouso"><td>Valizas</td><td>90</td></tr>
+        <tr class="pouso"><td>Cabo Polonio (port.)</td><td>97</td></tr>
         <tr><td>Oceania del Polonio</td><td>106</td></tr>
         <tr><td>Santa Isabel</td><td>130</td></tr>
         <tr><td>La Pedrera</td><td>133</td></tr>
         <tr><td>Arachania</td><td>137</td></tr>
-        <tr><td>La Paloma</td><td>142</td></tr>
+        <tr class="pouso"><td>La Paloma</td><td>142</td></tr>
         <tr><td>Laguna Rocha</td><td>156</td></tr>
         <tr><td>Condominio Chique</td><td>170</td></tr>
-        <tr><td>Laguna Garzon</td><td>187</td></tr>
+        <tr class="pouso"><td>Laguna Garzon</td><td>187</td></tr>
         <tr><td>Arenas de J. Ignacio</td><td>193</td></tr>
         <tr><td>Jose Ignacio</td><td>195</td></tr>
         <tr><td>Santa Monica</td><td>202</td></tr>
@@ -75,7 +79,7 @@
         <tr><td>Laguna Blanca</td><td>215</td></tr>
         <tr><td>La Barra</td><td>217</td></tr>
         <tr><td>Punta (los dedos)</td><td>228</td></tr>
-        <tr><td>Punta Ballena</td><td>242</td></tr>
+        <tr class="pouso"><td>Punta Ballena</td><td>242</td></tr>
         <tr><td>Chihuahua</td><td>247</td></tr>
         <tr><td>Ocean Park</td><td>256</td></tr>
         <tr><td>Av. Americas Unidas<br/>(acesso Piriápolis)</td><td>257</td></tr>
@@ -84,16 +88,16 @@
         <tr><td>San Francisco</td><td>270</td></tr>
         <tr><td>Piriápolis</td><td>275</td></tr>
         <tr><td>Playa Hermosa</td><td>279</td></tr>
-        <tr><td>Las Flores<br/>(camp. El Eden)</td><td>283</td></tr>
+        <tr class="pouso"><td>Las Flores<br/>(camp. El Eden)</td><td>283</td></tr>
         <tr><td>Bella Vista</td><td>286</td></tr>
         <tr><td>Baln. Solís</td><td>290</td></tr>
         <tr><td>Cuchilla Alta</td><td>302</td></tr>
         <tr><td>Santa Lucía del Este</td><td>306</td></tr>
         <tr><td>La Tuna</td><td>308</td></tr>
         <tr><td>Costa Azul</td><td>317</td></tr>
-        <tr><td>Parque del Plata<br/>(camping del Parque)</td><td>322</td></tr>
+        <tr class="pouso"><td>Parque del Plata<br/>(camping del Parque)</td><td>322</td></tr>
         <tr><td>Atlántida</td><td>328</td></tr>
-        <tr><td>Salinas<br/>(camping Albatros)<br/>(camping Playa Escondida)</td><td>355</td></tr>
+        <tr class="pouso"><td>Salinas<br/>(camping Albatros)<br/>(camping Playa Escondida)</td><td>355</td></tr>
         <tr><td>Ciudad de la Costa<br/>(Montevideo)</td><td>350</td></tr>
         <tr><td>Parque Roosevelt</td><td>355</td></tr>
         <tr><td>Playa Carrasco</td><td>359</td></tr>
@@ -103,9 +107,32 @@
         <tr><td>Casa Tia Ida</td><td>374</td></tr>
     </table>
 
+
     <iframe src="https://www.google.com/maps/d/embed?mid=z32qCUCL7tTQ.kOUOnp-ptcHw"
     width="640" height="480"></iframe>
-    <table>
+
+    <script type="text/javascript">
+        function recalculate(event) {
+            var thisRow = event.path[1];
+            var distValue = thisRow.childNodes[1].innerHTML;
+            
+            for (var i = 1, row; row = table.rows[i]; i++) {
+                var curDist = parseInt(row.cells[1].innerHTML)
+                var newDist = curDist - distValue;
+                row.cells[1].innerHTML = "" + newDist;
+            };
+        }
+
+        var distances = []; 
+
+        var table = document.getElementById("distanceTable");
+
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            var distance = parseInt(row.cells[1].innerHTML);
+            distances.push(distance);
+            row.addEventListener('click', recalculate);            
+        }
+    </script>
 
 </body>
 </html>
