@@ -132,7 +132,8 @@
         for (var i = 1, row; row = table.rows[i]; i++) {
             var distance = parseInt(row.cells[1].innerHTML);
             distances.push(distance);
-            row.addEventListener('click', recalculate);            
+            row.addEventListener('click', recalculate);
+            row.addEventListener('touchstart', recalculate, false);
         }
     </script>
 
