@@ -13,7 +13,7 @@
     </style>
     -->
 
-
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 
     <!--
     <meta http-equiv="refresh" content="2">
@@ -116,14 +116,17 @@
 
     <script type="text/javascript">
         function recalculate(event) {
-            var thisRow = event.path[1];
+            //var thisRow = event.path[1];
+            var thisRow = event.currentTarget;
             var distValue = thisRow.childNodes[1].innerHTML;
+            
             
             for (var i = 1, row; row = table.rows[i]; i++) {
                 var curDist = parseInt(row.cells[1].innerHTML)
                 var newDist = curDist - distValue;
                 row.cells[1].innerHTML = "" + newDist;
             };
+            
         }
 
         var distances = []; 
@@ -133,9 +136,12 @@
         for (var i = 1, row; row = table.rows[i]; i++) {
             var distance = parseInt(row.cells[1].innerHTML);
             distances.push(distance);
-            row.addEventListener('click', recalculate);
-            row.addEventListener('touch', recalculate, false);
+            //row.addEventListener('click', recalculate);
+            //row.addEventListener('touch', recalculate, false);
         }
+
+        $("tr").on("click", recalculate);
+
     </script>
 
 </body>
