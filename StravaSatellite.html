@@ -25,7 +25,9 @@
 
             var imageMapType = new google.maps.ImageMapType({
                 getTileUrl: function(coord, zoom) {
-                    var url = ['http://c-globalheat.strava.com/tiles/cycling/color1/',
+                    var servers = ['a', 'b', 'c'];
+                    var server = servers[Math.floor(servers.length * Math.random())]
+                    var url = ['http://', server, '-globalheat.strava.com/tiles/cycling/color1/',
                                 zoom, '/', coord.x, '/', coord.y, '.png?v=6'].join('');
                     //alert(url);
                     return url;
@@ -34,10 +36,6 @@
         });
 
             map.overlayMapTypes.push(imageMapType);
-            
-            var panoramioLayer = new google.maps.panoramio.PanoramioLayer();
-            panoramioLayer.setMap(map);            
-
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);
