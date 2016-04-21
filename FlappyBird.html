@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="utf-8">
+	<title>HTML5 Canvas Sandbox</title>
+  </head>
+
+  <body>
+
+	<canvas id="Canvas" width="500" height="500"></canvas>
+
+	<script>
+		var lastTime = Date.now();
+		var TIME_INCREMENT = 1;
+
+		var x = 0;
+		
+		var y = 0;
+		var vy = 0;
+		var ay = 0;
+		var gravidade = 0.002;
+		var impulso = 0.4;
+
+		var elem = document.getElementById('Canvas');
+		var context = elem.getContext('2d');		
+
+		(function() {
+		  var requestAnimationFrame = 
+		  	window.requestAnimationFrame || 
+		  	window.mozRequestAnimationFrame ||
+			window.webkitRequestAnimationFrame || 
+			window.msRequestAnimationFrame;
+		  window.requestAnimationFrame = requestAnimationFrame;
+		})();
+
+		function redraw () {
+			var currentTime = Date.now();
+			var lag = currentTime - lastTime;
+
+			while (lag >= TIME_INCREMENT) {
+				update();
+				lag -= TIME_INCREMENT;
+			}
+			
+			lastTime = currentTime;
+
+			draw();
+			window.requestAnimationFrame(redraw);			
+		}
+
+
+
+
+		function update() {
+			ay = getAcceleration();
+			vy = getVelocity();
+			y = getPosition();			
+		}
+
+		function getAcceleration() {
+			return gravidade;
+		}
+
+		function getVelocity() {
+			var v = vy;
+			if (y > 0)
+				v -= ay;
+			return v;
+		}
+
+		function getPosition() {
+			var pos = y + vy;
+			if (pos < 0) {
+				pos = 0;
+				vy = 0;
+			}
+			return pos;
+		}
+
+		function draw() {
+			context.save();
+
+			context.fillStyle = '#fdc';
+			context.fillRect(0,0,elem.width, elem.height);
+
+			context.translate(elem.width*0.3, elem.height * 0.8);
+			context.scale(1, -1);
+
+			context.fillStyle = '#00f';
+			context.beginPath();
+			context.arc(x, y, 20, 0, 2*Math.PI);
+			context.fill();
+
+			context.restore();
+		}
+
+
+		window.requestAnimationFrame(redraw);
+
+
+		window.addEventListener("keyup", onKeyUp, false);
+
+		function onKeyUp(event) {
+			var keyCode = event.keyCode;
+
+			switch (keyCode) {
+				case 87: //w
+				case 38: //arrowUp
+					vy = impulso;
+					break;
+			}
+		}
+	</script>
+
+
+  </body>
+
+</html>
