@@ -21,8 +21,6 @@
 		var gravidade = 0.002;
 		var impulso = 0.4;
 
-		var audio = new Audio('jump.wav');
-
 		var elem = document.getElementById('Canvas');
 		var context = elem.getContext('2d');		
 
@@ -105,6 +103,7 @@
 		
 		function onTouchStart(event) {
 			vy = impulso;
+			var jumpSound = new Audio('sfx_wing.ogg');
 			jumpSound.play();
 		}
 
@@ -114,6 +113,7 @@
 			switch (keyCode) {
 				case 87: //w
 				case 38: //arrowUp
+					var jumpSound = new Audio('sfx_wing.ogg');
 					jumpSound.play();
 					vy = impulso;
 					break;
