@@ -98,9 +98,9 @@
 		window.requestAnimationFrame(redraw);
 
 
-		window.addEventListener("keyup", onKeyUp, false);
+		window.addEventListener("keydown", onKeyDown, false);
 
-		function onKeyUp(event) {
+		function onKeyDown(event) {
 			var keyCode = event.keyCode;
 
 			switch (keyCode) {
