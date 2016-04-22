@@ -99,6 +99,11 @@
 
 
 		window.addEventListener("keydown", onKeyDown, false);
+		window.addEventListener("touchstart", onTouchStart, false);
+		
+		function onTouchStart(event) {
+			vy = impulso;
+		}
 
 		function onKeyDown(event) {
 			var keyCode = event.keyCode;
