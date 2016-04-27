@@ -7,7 +7,7 @@
 
   <body>
 
-	<canvas id="Canvas" width="500" height="500"></canvas>
+	<canvas id="Canvas" width="1000" height="500"></canvas>
 
 	<script>
 		var lastTime = Date.now();
@@ -18,8 +18,12 @@
 		var y = 0;
 		var vy = 0;
 		var ay = 0;
-		var gravidade = 0.002;
+		var gravidade = 0.0018;
 		var impulso = 0.4;
+
+		var distanciaPilares = 200;
+
+		var pilares = [];
 
 		var elem = document.getElementById('Canvas');
 		var context = elem.getContext('2d');		
@@ -48,13 +52,34 @@
 			window.requestAnimationFrame(redraw);			
 		}
 
-
+		var sentidoAtual = -1;
 
 
 		function update() {
 			ay = getAcceleration();
 			vy = getVelocity();
-			y = getPosition();			
+			y = getPosition();		
+
+			if (pilares.length == 0 || 
+				pilares[pilares.length-1].posicao < 800 - distanciaPilares)
+			{
+				var novo = {
+					posicao: 800,
+					sentido: sentidoAtual,
+					altura: Math.random() * 100
+				};
+				pilares.push(novo);
+				sentidoAtual *= -1;
+			}
+
+			for (var i = 0; i < pilares.length; i++) {
+				var pilar = pilares[i];
+				if (pilar.posicao < -80)
+					pilares.splice(i, 1);
+				else {
+					pilar.posicao -= 0.12;
+				}
+			}
 		}
 
 		function getAcceleration() {
@@ -83,13 +108,25 @@
 			context.fillStyle = '#fdc';
 			context.fillRect(0,0,elem.width, elem.height);
 
-			context.translate(elem.width*0.3, elem.height * 0.8);
+			context.translate(100, elem.height * 0.8);
 			context.scale(1, -1);
 
+			// desenha bolinha
 			context.fillStyle = '#00f';
 			context.beginPath();
 			context.arc(x, y, 20, 0, 2*Math.PI);
 			context.fill();
+
+			// desenha pilares
+			for (var i = 0; i < pilares.length; i++) {
+				var pilar = pilares[i];
+				var inicio = pilar.altura;
+				var fim = pilar.sentido < 0 ? 0 : 500;
+				context.beginPath();
+				context.moveTo(pilar.posicao, inicio);
+				context.lineTo(pilar.posicao, fim);
+				context.stroke();
+			}
 
 			context.restore();
 		}
@@ -104,6 +141,7 @@
 		function onTouchStart(event) {
 			vy = impulso;
 			var jumpSound = new Audio('sfx_wing.ogg');
+			jumpSound.volume = 0.7;
 			jumpSound.play();
 		}
 
@@ -114,6 +152,7 @@
 				case 87: //w
 				case 38: //arrowUp
 					var jumpSound = new Audio('sfx_wing.ogg');
+					jumpSound.volume = 0.7;
 					jumpSound.play();
 					vy = impulso;
 					break;
