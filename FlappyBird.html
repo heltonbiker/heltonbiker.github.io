@@ -18,6 +18,9 @@
 		var y = 0;
 		var vy = 0;
 		var ay = 0;
+
+        var rotation = 0;
+
 		var gravidade = 0.0018;
 		var impulso = 0.4;
 
@@ -58,7 +61,9 @@
 		function update() {
 			ay = getAcceleration();
 			vy = getVelocity();
-			y = getPosition();		
+			y = getPosition();	
+
+            rotation = getRotation();
 
 			if (pilares.length == 0 || 
 				pilares[pilares.length-1].posicao < 800 - distanciaPilares)
@@ -102,6 +107,11 @@
 			return pos;
 		}
 
+        function getRotation() {
+            return Math.atan2(vy, 0.5);            
+        }
+
+
 		function draw() {
 			context.save();
 
@@ -111,11 +121,15 @@
 			context.translate(100, elem.height * 0.8);
 			context.scale(1, -1);
 
-			// desenha bolinha
-			context.fillStyle = '#00f';
-			context.beginPath();
-			context.arc(x, y, 20, 0, 2*Math.PI);
-			context.fill();
+			// desenha quadradinho
+            context.save();
+			context.translate(x,y);
+            context.rotate(rotation);
+            context.fillStyle = '#00f';
+            var rh = 15;
+            var rv = 10;
+			context.fillRect(-rh, -rv, 2*rh, 2*rv);
+            context.restore();
 
 			// desenha pilares
 			for (var i = 0; i < pilares.length; i++) {
