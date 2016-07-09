@@ -62,8 +62,8 @@
             map.addListener("center_changed", function(event)
             {
             	var ll = map.getCenter();
-                var newurl = "" + ll.lat() + "," + 
-                	              ll.lng() + "," +
+                var newurl = "" + ll.lat().toFixed(6) + "," + 
+                	              ll.lng().toFixed(6) + "," +
                 	              map.getZoom();
 
                 window.location.hash = newurl;
