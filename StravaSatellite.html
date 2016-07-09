@@ -19,29 +19,21 @@
         	var LAT = -30;
         	var LON = -51;
 
-        	var newZ = undefined;
-        	var newLAT = undefined;
-        	var newLON = undefined;
-
-        	try {
-	        	var hash = window.location.hash.substring(1);
+        	readhash: try {
+	        	var hash = window.location.hash.substring(1);	       	
 	        	var fields = hash.split(',');
-	        	newLAT = parseFloat(fields[0]);
-	        	newLON = parseFloat(fields[1]);
-	        	newZ = parseInt(fields[2]);
-	        	console.log(fields);	        	
-	        }
-	        catch (e) {
-	        	console.log(e);
-	        }
+	        	if (fields.length < 3)
+	        		break readhash;
+	        	var newLAT = parseFloat(fields[0]);
+	        	var newLON = parseFloat(fields[1]);
+	        	var newZ = parseInt(fields[2]);
 
-	        if (![newLAT, newLON, Z].some(
-	        	function(v){
-	        		return v == undefined 
-	        	})) {
 	        	Z = newZ;
 	        	LAT = newLAT;
 	        	LON = newLON;
+	        }
+	        catch (e) {
+	        	console.log(e);
 	        }
 
             var mapOptions = {
