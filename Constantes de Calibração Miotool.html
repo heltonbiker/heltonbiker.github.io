@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>Constantes Miotool</title>
+
+    <style type="text/css">
+        html { background: black; }
+        body { margin-top: 50px; margin-left:150px; }
+        p, body { font-family: Helvetica, sans-serif; }
+        input { font-size: 150%; }
+    </style>
+</head>
+
+<body>
+    <div style="background: #bbb; padding: 50px;">
+    <div style="border-bottom: 1px solid black;">
+        <p>Pressupostos:</p>
+        <ul>
+            <li>Valores digitais no eixo horizontal</li>
+            <li>Valores físicos no eixo vertical</li>
+            <li>A e B devem ser usados para obter valores físicos a partir de digitais:<br/>
+                (valor físico) = A * (valor digital) + B</li>
+        </ul>
+    </div>
+    <table>
+        <tr>
+            <td width=100><label>D1</label></td>
+            <td width=100><label>F1</label></td>
+            <td width=100><label>A (slope)</label></td>
+        </tr>
+        <tr>
+            <td><input id="d1" type="text" value="0" /></td>
+            <td><input id="f1" type="text" value="0" /></td>
+            <td><input id="A"  type="text"  /></td>
+        </tr>
+        <tr>
+            <td><br/></td>
+        </tr>
+
+        <tr>
+            <td><label>D2</label></td>
+            <td><label>F2</label></td>
+            <td><label>B (offset)</label></td>
+        </tr>
+        <tr>
+            <td><input id="d2" type="text" value="1" /></td>
+            <td><input id="f2" type="text" value="30" /></td>
+            <td><input id="B"  type="text" /></td>
+        </tr>
+        <tr>
+            <td><br/></td>
+        </tr>
+
+        <tr>
+            <td><button onClick="calcular(Digital);">Calcular<br/>valores digitais</button></input></td>
+            <td><button onClick="calcular(Fisico);">Calcular<br/>valores físicos</button></input></td>
+            <td><button onClick="calcular(Equacao);">Calcular<br/>valores da equação</button></input></td>
+        </tr>
+    </table>
+    </div>
+
+
+    <script>
+        var d1, d2, f1, f2, A, B;
+
+        function calcular(func) {
+            var varnames = ["d1", "d2", "f1", "f2", "A", "B"];
+            for (var s in varnames) {
+                eval( varnames[s] + ' = parseFloat(document.getElementById("' + varnames[s] + '").value)' );
+            }
+
+            func();
+
+            for (var s in varnames) {
+                eval( 'document.getElementById("' + varnames[s] + '").value = ' + varnames[s] );
+            }
+        }
+
+        function Digital() {
+
+            ///////////////
+            d1 = (f1 - B)/A;
+            d2 = (f2 - B)/A;
+            ///////////////
+        }
+
+        function Fisico() {
+
+            ///////////////
+            f1 = d1 * A + B;
+            f2 = d2 * A + B;
+            ///////////////
+        }
+
+        function Equacao() {
+
+            ///////////////////
+            A = (f2-f1)/(d2-d1);
+            B = f2 - d2 * A;
+            ///////////////////
+        }
+
+    </script>
+
+</body>
+</html>
