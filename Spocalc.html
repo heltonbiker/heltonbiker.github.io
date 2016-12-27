@@ -21,19 +21,19 @@
         <table>
             <tr>
                 <td><label for="flange_offset">Flange Offset</label></td>
-                <td><input id="flange_offset" value="26" onchange="calcula();"></input></td>
+                <td><input id="flange_offset" value="18.5" onchange="calcula();"></input></td>
             </tr>
             <tr>
                 <td><label for="flange_radius">Flange Radius</label></td>
-                <td><input id="flange_radius" value="34" onchange="calcula();"></input></td>
+                <td><input id="flange_radius" value="22.5" onchange="calcula();"></input></td>
             </tr>
             <tr>
                 <td><label for="rim_radius">Rim Radius</label></td>
-                <td><input id="rim_radius" value="288" onchange="calcula();"></input></td>
+                <td><input id="rim_radius" value="343.5" onchange="calcula();"></input></td>
             </tr>
             <tr>
                 <td><label for="rim_holes">Rim Holes</label></td>
-                <td><input id="rim_holes" value="36" onchange="calcula();"></input></td>
+                <td><input id="rim_holes" value="32" onchange="calcula();"></input></td>
             </tr>
         </table>
     </form>
@@ -46,6 +46,7 @@
         function calcula() {
 
             var root=document.getElementById('tablediv');
+            root.innerHtml = "";
             var tab=document.createElement('table');
             var tbo=document.createElement('tbody');
             var row, cell;
