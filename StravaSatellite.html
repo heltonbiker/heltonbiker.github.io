@@ -72,7 +72,14 @@
             
             var myloc = new google.maps.Marker({
                 clickable: false,
-                shadow: null,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillColor: "#4285F4",
+                    fillOpacity: 1,
+                    strokeWeight: 1,
+                    strokeColor: "white",
+                    scale: 6
+                },
                 zIndex: 999,
                 map: map
             });
