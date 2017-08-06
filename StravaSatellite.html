@@ -43,6 +43,56 @@
             };
             map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
+
+
+
+
+
+
+
+            var controlDiv = document.createElement('div');
+            
+            var firstChild = document.createElement('button');
+            firstChild.style.backgroundColor = '#fff';
+            firstChild.style.border = 'none';
+            firstChild.style.outline = 'none';
+            firstChild.style.width = '28px';
+            firstChild.style.height = '28px';
+            firstChild.style.borderRadius = '2px';
+            firstChild.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
+            firstChild.style.cursor = 'pointer';
+            firstChild.style.marginRight = '10px';
+            firstChild.style.padding = '0px';
+            firstChild.title = 'Your Location';
+            controlDiv.appendChild(firstChild);
+            
+            var secondChild = document.createElement('div');
+            secondChild.style.margin = '5px';
+            secondChild.style.width = '18px';
+            secondChild.style.height = '18px';
+            secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)';
+            secondChild.style.backgroundSize = '180px 18px';
+            secondChild.style.backgroundPosition = '0px 0px';
+            secondChild.style.backgroundRepeat = 'no-repeat';
+            //secondChild.id = 'you_location_img';
+            firstChild.appendChild(secondChild);
+            
+            //google.maps.event.addListener(map, 'dragend', function() {
+            //    $('#you_location_img').css('background-position', '0px 0px');
+            //});
+
+            firstChild.addEventListener('click', function() {
+                map.panTo(myloc.getPosition());
+            });
+
+            map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);
+
+
+
+
+
+
+
             
             var imageMapType = new google.maps.ImageMapType({
                 getTileUrl: function(coord, zoom) {
@@ -84,11 +134,12 @@
                 map: map
             });
 
+            var me;
+
             if (navigator.geolocation) 
                 navigator.geolocation.watchPosition(function(pos) {
-                    var me = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+                    me = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
                     myloc.setPosition(me);
-                    console.log("updated location")
                 }, function(error) {
                     console.log(error.message);
                 });
