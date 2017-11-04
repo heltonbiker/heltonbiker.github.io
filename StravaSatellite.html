@@ -82,7 +82,7 @@
             //});
 
             firstChild.addEventListener('click', function() {
-                map.setZoom(16);
+                map.setZoom(15);
                 map.panTo(myloc.getPosition());
             });
 
@@ -112,11 +112,6 @@
 
             // NEW HEATMAP VERSION
             //https://heatmap-external-a.strava.com/tiles/bike/bluered/x/y/z.png?v=19
-            function convertY(y, z)
-            {
-                return Math.pow(2, z) - y - 1;
-            }
-
             var imageMapType = new google.maps.ImageMapType({
                 getTileUrl: function(coord, zoom) {
                     var servers = ['a', 'b', 'c'];
