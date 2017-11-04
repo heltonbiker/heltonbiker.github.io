@@ -93,8 +93,8 @@
 
 
 
-
-            
+            // PREVIOUS HEATMAP VERSION
+            /*
             var imageMapType = new google.maps.ImageMapType({
                 getTileUrl: function(coord, zoom) {
                     var servers = ['a', 'b', 'c'];
@@ -107,6 +107,36 @@
                 },
                 tileSize: new google.maps.Size(256, 256)
             });
+            */
+
+
+            // NEW HEATMAP VERSION
+            //https://heatmap-external-a.strava.com/tiles/bike/bluered/x/y/z.png?v=19
+            function convertY(y, z)
+            {
+                return Math.pow(2, z) - y - 1;
+            }
+
+            var imageMapType = new google.maps.ImageMapType({
+                getTileUrl: function(coord, zoom) {
+                    var servers = ['a', 'b', 'c'];
+                    var server = servers[Math.floor(servers.length * Math.random())]
+                    var url = ['https://heatmap-external-', server, '.strava.com/tiles/bike/bluered/',
+                    zoom, '/', coord.x, '/', coord.y, '.png?v=19'].join('');
+                    //alert(url);
+                    console.log(url);
+                    return url;
+                },
+                tileSize: new google.maps.Size(256, 256)
+            });
+
+
+
+
+
+
+
+
             
             map.overlayMapTypes.push(imageMapType);
             
