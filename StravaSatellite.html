@@ -116,7 +116,7 @@
                 getTileUrl: function(coord, zoom) {
                     var servers = ['a', 'b', 'c'];
                     var server = servers[Math.floor(servers.length * Math.random())]
-                    var url = ['https://heatmap-external-', server, '.strava.com/tiles/bike/bluered/',
+                    var url = ['https://heatmap-external-', server, '.strava.com/tiles/ride/bluered/',
                     zoom, '/', coord.x, '/', coord.y, '.png?v=19'].join('');
                     //alert(url);
                     console.log(url);
