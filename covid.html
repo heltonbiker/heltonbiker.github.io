@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Covid</title>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>  
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    <style type="text/css">
+        
+    </style>
+</head>
+
+<body>
+    <div id="divSvg"></div>
+    <script>
+        fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+        .then(response => response.text())
+        .then(text => {
+            
+            let chart = d3.select("#divSvg")
+            .append("svg")
+            .attr("width", 1200)
+            .attr("height", 800)
+            .attr("style", "background-color: #ccc")
+            .append("g")
+            .attr("transform", "translate(0,800) scale(1,-1)");
+
+            let lines = text.match(/[^\r\n]+/g);
+                        
+            let records = lines.slice(1)
+            
+            for (let ri in records)
+            {
+                let record = records[ri].split(',');
+                let countryName = record[1];
+                if (record[0].length > 0) {
+                    countryName += ` (${record[0]})`;
+                }
+
+                cases = record.slice(4).map(parseFloat);
+                
+                let color = "gray"
+                switch (countryName) {
+                    case "Brazil": color = "green"; break;
+                    case "US": color = "red"; break;
+                }
+
+                chart.append("path")
+                .attr("stroke", color)
+                .attr("fill", "none")
+                .attr("d", d3.line()(cases.map((v,i) => [i*10,v/500])))
+
+                //console.log(countryName);
+                //console.log(cases)
+            }
+
+        });
+    </script>
+</body>
+</html>
