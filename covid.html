@@ -50,7 +50,7 @@
                 chart.append("path")
                 .attr("stroke", color)
                 .attr("fill", "none")
-                .attr("d", d3.line()(cases.map((v,i) => [i*10,v/500])))
+                .attr("d", d3.line()(cases.map((v,i) => [i*10 - 300,v/500])))
 
                 //console.log(countryName);
                 //console.log(cases)
