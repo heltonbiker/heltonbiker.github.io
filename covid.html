@@ -13,9 +13,9 @@
 </head>
 
 <body>
-    <input type="radio" id="confirmed" name="mode" value="confirmed" onclick="redraw();" checked="true"><label for="confirmed">Confirmed</label>
-    <input type="radio" id="deaths" name="mode" value="deaths" onclick="redraw();"><label for="deaths">Deaths</label>
-
+    <input type="radio" id="confirmed" name="mode" value="confirmed" onclick="switchMode();" checked="true"><label for="confirmed">Confirmed</label>
+    <input type="radio" id="deaths" name="mode" value="deaths" onclick="switchMode();"><label for="deaths">Deaths</label>
+    
     <div id="divSvg"></div>
     
     <script>
@@ -27,18 +27,22 @@
         
         let deaths = null;
         let confirmed = null;
-                
+
+        let width = 1200;
+        let height = 800;
+        
         let chart = d3.select("#divSvg")
         .append("svg")
-        .attr("width", 1200)
-        .attr("height", 800)
+        .attr("width", width)
+        .attr("height", height)
         .attr("style", "background-color: #ccc")
         .on("wheel", function(d){
             var direction = d3.event.wheelDelta < 0 ? 'down' : 'up';
             zoom(direction === 'up' ? 1 : -1);
         });
-
-
+        
+        let records = null;
+        
         let yScale = 0.0002;  // TODO: this should be calculated based on largest value (largest of the latest values)
         let hoffset = 500;
         let hscale = 8;
@@ -59,30 +63,49 @@
             }
             return result;
         }
-
+        
         function zoom(direction) {
             yScale *= (1 + (direction * 0.2));
             redraw();
         }
         
-        function redraw() {
+        function getScale(records) {
+            let largest = 0;
+            for (let countryName in records) {
+                let cases = records[countryName];
+                let last = cases[cases.length - 1];
+                if (last > largest)
+                    largest = last;
+            }            
+            return 0.95 * height / largest
+        }
+
+        function switchMode() {
             let mode = document.querySelector('input[name="mode"]:checked').value;
-            console.log(mode)
-            let records = null;
             switch (mode) {
                 case "confirmed": records = confirmed; break;
                 case "deaths": records = deaths; break;                
             }
-            
-            d3.selectAll(".refreshable").remove();
 
+            yScale = getScale(records);
+
+            redraw();
+        }
+        
+        function redraw() {            
+            d3.selectAll(".refreshable").remove();
+                        
             for (let countryName in records) {
                 let cases = records[countryName];
                 
                 let color = "gray"
                 switch (countryName) {
-                    case "Brazil": color = "green"; break;
-                    case "US": color = "red"; break;
+                    case "Brazil": 
+                    color = "green"; 
+                    break;
+                    case "US": 
+                    color = "red"; 
+                    break;
                 }
                 
                 chart.append("path")
@@ -100,61 +123,8 @@
         }
         
         
-        fetch(deathsUrl).then(response => response.text()).then(   text => { deaths    = loadData(text); redraw(); });
-        fetch(confirmedUrl).then(response => response.text()).then(text => { confirmed = loadData(text); redraw(); });
-        
-        
-        // fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
-        // .then(response => response.text())
-        // .then(text => {
-            
-            //     let chart = d3.select("#divSvg")
-            //     .append("svg")
-            //     .attr("width", 1200)
-            //     .attr("height", 800)
-            //     .attr("style", "background-color: #ccc");
-            
-            //     let lines = text.match(/[^\r\n]+/g);
-            
-            //     let records = lines.slice(1)
-            
-            //     let yScale = 0.0002;
-            //     let hoffset = 500;
-            //     let hscale = 8;
-            
-            //     for (let ri in records)
-            //     {
-                //         let record = records[ri].split(',');
-                //         let countryName = record[1];
-                //         if (record[0].length > 0) {
-                    //             countryName += ` (${record[0]})`;
-                    //         }
-                    
-                    //         cases = record.slice(4).map(parseFloat);
-                    
-                    //         let color = "gray"
-                    //         switch (countryName) {
-                        //             case "Brazil": color = "green"; break;
-                        //             case "US": color = "red"; break;
-                        //         }
-                        
-                        //         chart.append("path")
-                        //         .attr("stroke", color)
-                        //         .attr("fill", "none")
-                        //         .attr("d", d3.line()(cases.map((v,i) => [i*hscale - hoffset, 800 - v*yScale])))
-                        
-                        //         chart.append("text")
-                        //         .attr("x", cases.length * hscale - hoffset)
-                        //         .attr("y", 800-(cases[cases.length-1]*yScale))
-                        //         .text(countryName);
-                        
-                        
-                        //         //console.log(countryName);
-                        //         //console.log(cases)
-                        //     }
-                        
-                        // });
-                    </script>
-                </body>
-                </html>
-                
+        fetch(deathsUrl).then(response => response.text()).then(   text => { deaths    = loadData(text); switchMode(); });
+        fetch(confirmedUrl).then(response => response.text()).then(text => { confirmed = loadData(text); switchMode(); });
+    </script>
+</body>
+</html>
