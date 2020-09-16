@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Catálogo de Peças</title>
-  <meta name="description" content="A description.">
+  <meta name="description" content="Visite-nos no insta: @luisfelipeogro">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     h1,
@@ -24,6 +24,10 @@
     td {
       border: 1px solid black;
     }
+
+    table {
+      width: 100%;
+    }
   </style>
 </head>
 
@@ -33,17 +37,38 @@
   <section>
     <table id="catalogo" class="center">
       <tr>
-        <th>Nome</th>
-        <th>Descrição</th>
-        <th>Valor (reais)</th>
+        <th>Peça</th>
+        <th>Preço</th>
       </tr>
-      <tr>
-        <td>Gideão Ritchey</td>
-        <td>bitola 25.2</td>
-        <td>100,00</td>
-        </th>
+      <tr></tr>
     </table>
   </section>
+
+  <script>
+    let sheetKey = '1mL7AhKSo5Zg8FRCPizy8-2qpSgtZ-LM-YD8J962TMyM';
+    let sheetName = 'Peças'
+    let url = `https://docs.google.com/spreadsheets/d/${sheetKey}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
+
+    function insertRow(line) {
+      let fields = line.split(',');
+      let row = document.getElementById('catalogo').insertRow(1);
+
+      let mapeamento = [[0,0],[2,1]];
+
+      for (let [from, to] of mapeamento) {
+        row.insertCell(to).innerHTML = fields[from];
+      }
+    }
+
+    function processLines(text) {
+      let lines = text.split('\n').slice(1);
+      for (let line of lines) {
+        insertRow(line);
+      }
+    }
+
+    fetch(url).then(response => response.text()).then(lines => processLines(lines));
+  </script>
 </body>
 
 </html>
