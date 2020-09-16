@@ -34,37 +34,51 @@
 <body>
   <h2>Ogro Bicicletas</h2>
   <h1>Catálogo</h1>
-  <section>
-    <table id="catalogo" class="center">
-      <tr>
-        <th>Peça</th>
-        <th>Preço</th>
-      </tr>
-      <tr></tr>
-    </table>
-  </section>
+  <section id="tableSection"></section>
 
   <script>
     let sheetKey = '1mL7AhKSo5Zg8FRCPizy8-2qpSgtZ-LM-YD8J962TMyM';
     let sheetName = 'Peças'
     let url = `https://docs.google.com/spreadsheets/d/${sheetKey}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
 
-    function insertRow(line) {
-      let fields = line.split(',');
-      let row = document.getElementById('catalogo').insertRow(1);
-
-      let mapeamento = [[0,0],[2,1]];
-
-      for (let [from, to] of mapeamento) {
-        row.insertCell(to).innerHTML = fields[from];
-      }
+    function getFields(line) {
+      return line.split(',').map(s => s.replace(/"/g,''));
     }
 
     function processLines(text) {
-      let lines = text.split('\n').slice(1);
-      for (let line of lines) {
-        insertRow(line);
+      let lines = text.split('\n');
+      let firstLine = lines.shift();
+
+      indices = [0, 2];
+
+      var tableSection = document.getElementById("tableSection");
+
+      var table = document.createElement("table");
+      var tableBody = document.createElement("tbody");
+
+      var headersRow = document.createElement("tr");
+      let headerFields = getFields(firstLine);
+
+      for (let i of indices) {
+        let header = document.createElement('th');
+        header.innerHTML = headerFields[i];
+        headersRow.appendChild(header);
       }
+      tableBody.appendChild(headersRow);
+
+      for (let line of lines) {
+        let row = document.createElement('tr');
+        let fields = getFields(line);
+        for (let i of indices) {
+          let cell = document.createElement('td');
+          cell.innerHTML = fields[i];
+          row.appendChild(cell);
+        }
+        tableBody.appendChild(row);
+      }
+
+      table.appendChild(tableBody);
+      tableSection.appendChild(table);
     }
 
     fetch(url).then(response => response.text()).then(lines => processLines(lines));
