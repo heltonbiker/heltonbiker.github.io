@@ -1,136 +1,168 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-    <meta charset="UTF-8" />
-    <title>Covid</title>
-    
-    <script src="https://d3js.org/d3.v5.min.js"></script>  
-    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    
-    <style type="text/css">
-        
-    </style>
+  <meta charset="UTF-8" />
+  <title>Covid</title>
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+  <style type="text/css">
+
+  </style>
 </head>
 
 <body>
-    <input type="radio" id="confirmed" name="mode" value="confirmed" onclick="switchMode();" checked="true"><label for="confirmed">Confirmed</label>
-    <input type="radio" id="deaths" name="mode" value="deaths" onclick="switchMode();"><label for="deaths">Deaths</label>
-    
-    <div id="divSvg"></div>
-    
-    <script>
-        let replaceToken = "###";
-        let baseUrl = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/" + 
-        `csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_${replaceToken}_global.csv`
-        let deathsUrl = baseUrl.replace("###", "deaths");
-        let confirmedUrl = baseUrl.replace("###", "confirmed");
-        
-        let deaths = null;
-        let confirmed = null;
+  <input type="radio" id="confirmed" name="mode" value="confirmed" onclick="switchMode();" checked="true">
+  <label for="confirmed">Confirmed</label>
 
-        let width = 1200;
-        let height = 800;
-        
-        let chart = d3.select("#divSvg")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("style", "background-color: #ccc")
-        .on("wheel", function(d){
-            var direction = d3.event.wheelDelta < 0 ? 'down' : 'up';
-            zoom(direction === 'up' ? 1 : -1);
-        });
-        
-        let records = null;
-        
-        let yScale = 1;  // TODO: this should be calculated based on largest value (largest of the latest values)
-        let hoffset = 300;
-        let hscale = 5;
-        
-        
-        function loadData(text) {
-            let lines = text.match(/[^\r\n]+/g);
-            let records = lines.slice(1);
-            let result = {};
-            for (let ri in records) {
-                let record = records[ri].split(',');
-                let countryName = record[1];
-                if (record[0].length > 0) {
-                    countryName += ` (${record[0]})`;
-                }
-                cases = record.slice(4).map(parseFloat);
-                result[countryName] = cases;
-            }
-            return result;
+  <input type="radio" id="deaths" name="mode" value="deaths" onclick="switchMode();">
+  <label for="deaths">Deaths</label>
+
+  <input type="radio" id="confirmedRate" name="mode" value="confirmedRate" onclick="switchMode();">
+  <label for="confirmedRate">Confirmed Rate</label>
+
+  <input type="radio" id="deathRate" name="mode" value="deathRate" onclick="switchMode();">
+  <label for="deathRate">Death Rate</label>
+
+  <div id="divSvg"></div>
+
+  <script>
+    let replaceToken = "###";
+    let baseUrl = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/" +
+      `csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_${replaceToken}_global.csv`
+    let deathsUrl = baseUrl.replace("###", "deaths");
+    let confirmedUrl = baseUrl.replace("###", "confirmed");
+
+    let deaths = null;
+    let confirmed = null;
+    let confirmedRate = null;
+    let deathRate = null;
+
+    let width = 1200;
+    let height = 800;
+
+    let chart = d3.select("#divSvg")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("style", "background-color: #ccc")
+      .on("wheel", function (d) {
+        var direction = d3.event.wheelDelta < 0 ? 'down' : 'up';
+        zoom(direction === 'up' ? 1 : -1);
+      });
+
+    let records = null;
+
+    let yScale = 1; // TODO: this should be calculated based on largest value (largest of the latest values)
+    let hoffset = 300;
+    let hscale = 5;
+
+
+    function loadData(text) {
+      let lines = text.match(/[^\r\n]+/g);
+      let records = lines.slice(1);
+      let result = {};
+      for (let ri in records) {
+        let record = records[ri].split(',');
+        let countryName = record[1];
+        if (record[0].length > 0) {
+          countryName += ` (${record[0]})`;
         }
-        
-        function zoom(direction) {
-            yScale *= (1 + (direction * 0.2));
-            redraw();
+        cases = record.slice(4).map(parseFloat);
+        result[countryName] = cases;
+      }
+      return result;
+    }
+
+    function rate(records) {
+      result = {}
+      const offset = 21;
+      for (let countryName in records) {
+        let cases = records[countryName];
+        let rates = Array(offset).fill(0);
+        for (let i = offset; i < cases.length; i++) {
+          rates.push(cases[i] - cases[i-offset]);
         }
-        
-        function getScale(records) {
-            let largest = 0;
-            for (let countryName in records) {
-                let cases = records[countryName];
-                let last = cases[cases.length - 1];
-                if (last > largest)
-                    largest = last;
-            }            
-            return 0.95 * height / largest
+        result[countryName] = rates;
+      }
+      return result;
+    }
+
+    function zoom(direction) {
+      yScale *= (1 + (direction * 0.2));
+      redraw();
+    }
+
+    function getScale(records) {
+      let largest = 0;
+      for (let countryName in records) {
+        let cases = records[countryName];
+        let max = Math.max(...cases)
+        if (max > largest)
+          largest = max;
+      }
+      return 0.95 * height / largest
+    }
+
+    function switchMode() {
+      let mode = document.querySelector('input[name="mode"]:checked').value;
+      records = {confirmed, deaths, confirmedRate, deathRate}[mode];
+
+      yScale = getScale(records);
+
+      redraw();
+    }
+
+    function redraw() {
+      d3.selectAll(".refreshable").remove();
+
+      for (let countryName in records) {
+        let cases = records[countryName];
+
+        let color = "gray"
+        switch (countryName) {
+          case "Brazil":
+            color = "green";
+            break;
+          case "US":
+            color = "red";
+            break;
+          case "India":
+            color = "orange";
+            break;
+          case "Mexico":
+            color = "brown";
+            break;
         }
 
-        function switchMode() {
-            let mode = document.querySelector('input[name="mode"]:checked').value;
-            switch (mode) {
-                case "confirmed": records = confirmed; break;
-                case "deaths": records = deaths; break;                
-            }
+        chart.append("path")
+          .classed("refreshable", true)
+          .attr("stroke", color)
+          .attr("fill", "none")
+          .attr("d", d3.line()(cases.map((v, i) => [i * hscale - hoffset, 800 - v * yScale])))
 
-            yScale = getScale(records);
+        chart.append("text")
+          .classed("refreshable", true)
+          .attr("x", cases.length * hscale - hoffset)
+          .attr("y", 800 - (cases[cases.length - 1] * yScale))
+          .text(countryName);
+      }
+    }
 
-            redraw();
-        }
-        
-        function redraw() {            
-            d3.selectAll(".refreshable").remove();
-                        
-            for (let countryName in records) {
-                let cases = records[countryName];
-                
-                let color = "gray"
-                switch (countryName) {
-                    case "Brazil": 
-                        color = "green"; 
-                        break;
-                    case "US": 
-                        color = "red"; 
-                        break;
-                    case "India":
-                        color = "orange";
-                        break;
-                    case "Mexico":
-                        color = "brown";
-                        break;
-                }
-                
-                chart.append("path")
-                .classed("refreshable", true)
-                .attr("stroke", color)
-                .attr("fill", "none")
-                .attr("d", d3.line()(cases.map((v,i) => [i*hscale - hoffset, 800 - v*yScale])))
-                
-                chart.append("text")
-                .classed("refreshable", true)
-                .attr("x", cases.length * hscale - hoffset)
-                .attr("y", 800-(cases[cases.length-1]*yScale))
-                .text(countryName);
-            }        
-        }
-        
-        
-        fetch(deathsUrl).then(response => response.text()).then(   text => { deaths    = loadData(text); switchMode(); });
-        fetch(confirmedUrl).then(response => response.text()).then(text => { confirmed = loadData(text); switchMode(); });
-    </script>
+
+    fetch(deathsUrl).then(response => response.text()).then(text => {
+      deaths = loadData(text);
+      deathRate = rate(deaths);
+      switchMode();
+    });
+    fetch(confirmedUrl).then(response => response.text()).then(text => {
+      confirmed = loadData(text);
+      confirmedRate = rate(confirmed);
+      switchMode();
+    });
+  </script>
 </body>
+
 </html>
