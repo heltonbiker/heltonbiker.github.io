@@ -14,17 +14,17 @@
 </head>
 
 <body>
-  <input type="radio" id="confirmed" name="mode" value="confirmed" onclick="switchMode();" checked="true">
-  <label for="confirmed">Confirmed</label>
-
-  <input type="radio" id="deaths" name="mode" value="deaths" onclick="switchMode();">
-  <label for="deaths">Deaths</label>
-
-  <input type="radio" id="confirmedRate" name="mode" value="confirmedRate" onclick="switchMode();">
+  <input type="radio" id="confirmedRate" name="mode" value="confirmedRate" onclick="switchMode();" checked="true">
   <label for="confirmedRate">Confirmed Rate</label>
 
   <input type="radio" id="deathRate" name="mode" value="deathRate" onclick="switchMode();">
   <label for="deathRate">Death Rate</label>
+  
+  <input type="radio" id="confirmed" name="mode" value="confirmed" onclick="switchMode();">
+  <label for="confirmed">Confirmed</label>
+
+  <input type="radio" id="deaths" name="mode" value="deaths" onclick="switchMode();">
+  <label for="deaths">Deaths</label>
 
   <div id="divSvg"></div>
 
@@ -56,7 +56,7 @@
     let records = null;
 
     let yScale = 1; // TODO: this should be calculated based on largest value (largest of the latest values)
-    let hoffset = 0;
+    let hoffset = 150;
     let hscale = 3; // pixels per day
 
 
