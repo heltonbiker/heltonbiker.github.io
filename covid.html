@@ -40,8 +40,8 @@
     let confirmedRate = null;
     let deathRate = null;
 
-    let width = $(window).width();
-    let height = $(window).height();
+    let width = $(window).width() * 0.9;
+    let height = $(window).height() * 0.9;
 
     let chart = d3.select("#divSvg")
       .append("svg")
@@ -57,7 +57,7 @@
 
     let yScale = 1; // TODO: this should be calculated based on largest value (largest of the latest values)
     let hoffset = 150;
-    let hscale = 3; // pixels per day
+    let hscale = 2.3; // pixels per day
 
 
     function loadData(text) {
