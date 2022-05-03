@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Teste Planilha</title>
+
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+  <style type="text/css">
+
+  </style>
+</head>
+
+<body>
+  <script>
+    let replaceToken = "###";
+    let url = "https://docs.google.com/spreadsheets/d/1DN3Zbj62FnfsL_JgYbZId3F70cGFlucjejf0UgdLpvo/export?format=csv";
+
+    function loadData(text) {
+      let lines = text.match(/[^\r\n]+/g);
+      alert(lines);
+      // let records = lines.slice(1);
+      // let result = {};
+      // for (let ri in records) {
+      //   let record = records[ri].split(',');
+      //   let countryName = record[1];
+      //   if (record[0].length > 0) {
+      //     countryName += ` (${record[0]})`;
+      //   }
+      //   cases = record.slice(4).map(parseFloat);
+      //   result[countryName] = cases;
+      // }
+      // return result;
+    }
+
+    fetch(url).then(response => response.text()).then(text => {
+      loadData(text);
+    });
+  </script>
+</body>
+
+</html>
