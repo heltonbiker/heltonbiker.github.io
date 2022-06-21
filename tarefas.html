@@ -18,8 +18,8 @@
     let url = "https://docs.google.com/spreadsheets/d/10R1UNCp4w_kGlHgJiFsizjUJYGNEI2ovp6HTPt7c63Y/export?format=csv";
 
     function loadData(text) {
-      let lines = text.match(/[^\r\n]+/g);
-      alert(lines);
+      let table = $.csv.toObjects(text);
+      console.log(table)
       // let records = lines.slice(1);
       // let result = {};
       // for (let ri in records) {
